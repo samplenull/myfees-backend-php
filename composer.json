@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "dekazimir/myfees",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "My Fees",
     "autoload": {
         "psr-4": { "": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
@@ -22,9 +22,9 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "nelmio/api-doc-bundle": "^2.13",
-        "friendsofsymfony/rest-bundle": "@dev",
-        "jms/serializer-bundle": "@dev"
+        "nelmio/api-doc-bundle": "~2.0",
+        "friendsofsymfony/rest-bundle": "~2.1",
+        "jms/serializer-bundle": "~1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -48,7 +48,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.5.9"
+            "php": "7.1"
         }
     },
     "extra": {
@@ -62,7 +62,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "3.2-dev"
+            "dev-master": "0.1-dev"
         }
     }
 }
