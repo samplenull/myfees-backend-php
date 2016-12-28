@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="reading")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ReadingRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Reading
 {
@@ -47,6 +48,13 @@ class Reading
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+
+    /** @ORM\PrePersist */
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     /**
      * Get id
