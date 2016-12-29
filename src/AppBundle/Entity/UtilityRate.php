@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="utility_rate")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UtilityRateRepository")
  */
-class UtilityRate
+class UtilityRate implements \JsonSerializable
 {
     /**
      * @var int
@@ -147,6 +147,17 @@ class UtilityRate
     public function setUtility($utility)
     {
         $this->utility = $utility;
+    }
+
+    function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'start_date' => $this->startDate->format(Utility::DATE_FORMAT),
+            'end_date' => $this->endDate->format(Utility::DATE_FORMAT),
+            'value' => $this->value,
+            'utility_id' => $this->getUtility()->getId()
+        ];
     }
 
 

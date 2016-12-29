@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="invoice")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\InvoiceRepository")
  */
-class Invoice
+class Invoice implements \JsonSerializable
 {
     /**
      * @var int
@@ -29,7 +29,7 @@ class Invoice
     private $date;
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="value", type="decimal", precision=7, scale=3)
      */
@@ -109,6 +109,14 @@ class Invoice
     }
 
 
-
+    function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'date' => $this->date->format(Utility::DATE_FORMAT),
+            'value' => $this->value,
+            'utility_id' => $this->getUtility()->getId()
+        ];
+    }
 }
 

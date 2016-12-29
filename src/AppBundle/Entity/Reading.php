@@ -146,6 +146,17 @@ class Reading
         $this->createdAt = $createdAt;
     }
 
+    function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'date' => $this->date->format(Utility::DATE_FORMAT),
+            'created_at' => $this->createdAt->format(Utility::DATE_FORMAT),
+            'value' => $this->value,
+            'utility_id' => $this->utility->getId()
+        ];
+    }
+
 
 }
 
