@@ -4,8 +4,6 @@ namespace AppBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\RestBundle\Controller\Annotations;
 
 /**
  * Class UtilityController
@@ -24,6 +22,7 @@ class UtilityController extends FOSRestController
      *     404 = "Returned when no utilities is found"
      *   }
      * )
+     *
      *
      */
     public function getUtilitiesAction()
@@ -48,11 +47,11 @@ class UtilityController extends FOSRestController
      *   }
      * )
      *
-     * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="id of specific note")
      *
      * @internal param int $id the utility id
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      */
     public function getUtilityAction($id)
     {
@@ -63,8 +62,6 @@ class UtilityController extends FOSRestController
         }
         return $this->handleView($this->view($data, 200));
     }
-
-
 
 
 }
