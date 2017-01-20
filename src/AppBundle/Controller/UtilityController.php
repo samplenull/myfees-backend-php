@@ -25,19 +25,16 @@ class UtilityController extends FOSRestController
      *   }
      * )
      *
-     * @return JsonResponse
-     * @internal param int $id the utility id
-     *
      */
     public function getUtilitiesAction()
     {
         $em = $this->get('doctrine')->getManager();
-            $response = $em->getRepository('AppBundle:Utility')->findAll();
+        $data = $em->getRepository('AppBundle:Utility')->findAll();
 
-        if (!$response) {
+        if (!$data) {
             $this->createNotFoundException('There is no utilities found');
         }
-        return new JsonResponse($response);
+        return $this->handleView($this->view($data, 200));
     }
 
     /**
@@ -51,20 +48,20 @@ class UtilityController extends FOSRestController
      *   }
      * )
      *
-     *  @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="id of specific note")
+     * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="id of specific note")
      *
-     * @return JsonResponse
      * @internal param int $id the utility id
-     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getUtilityAction($id)
     {
         $em = $this->get('doctrine')->getManager();
-        $response = $em->getRepository('AppBundle:Utility')->find($id);
-        if (!$response) {
+        $data = $em->getRepository('AppBundle:Utility')->find($id);
+        if (!$data) {
             $this->createNotFoundException('Utility does not exist');
         }
-        return new JsonResponse($response);
+        return $this->handleView($this->view($data, 200));
     }
 
 
