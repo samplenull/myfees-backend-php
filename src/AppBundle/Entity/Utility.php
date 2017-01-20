@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 use JsonSerializable;
 
 /**
@@ -34,18 +35,21 @@ class Utility implements JsonSerializable
     /**
      * @var UtilityRate[]
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\UtilityRate", mappedBy="utility")
+     * @Exclude
      */
     private $rates;
 
     /**
      * @var Invoice[]
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Invoice", mappedBy="utility")
+     * @Exclude
      */
     private $invoices;
 
     /**
      * @var Invoice[]
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reading", mappedBy="utility")
+     * @Exclude
      */
     private $readings;
 
