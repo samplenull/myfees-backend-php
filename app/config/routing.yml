@@ -1,6 +1,6 @@
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix:   /api/{version}/doc
+    prefix:   /api/v1/doc
 
 app:
     resource: "@AppBundle/Controller/"
@@ -8,8 +8,8 @@ app:
 
 utility:
     type: rest
-    prefix: /api/{version}
+    prefix: /api/v1
     resource: AppBundle\Controller\UtilityController
-    
+
 
 
