@@ -15,7 +15,7 @@ class UtilityRateType extends AbstractType
     {
         $builder->add('startDate')->add('endDate')->add('value')->add('utility')        ;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -31,7 +31,7 @@ class UtilityRateType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_utilityrate';
+        return 'utilityrate';
     }
 
 

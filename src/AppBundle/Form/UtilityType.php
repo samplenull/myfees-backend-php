@@ -31,7 +31,7 @@ class UtilityType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_utility';
+        return 'utility';
     }
 
 

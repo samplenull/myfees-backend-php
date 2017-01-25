@@ -31,7 +31,7 @@ class ReadingType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_reading';
+        return 'reading';
     }
 
 

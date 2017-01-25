@@ -31,7 +31,7 @@ class InvoiceType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_invoice';
+        return 'invoice';
     }
 
 
