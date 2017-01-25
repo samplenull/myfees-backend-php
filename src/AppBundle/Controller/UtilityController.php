@@ -63,5 +63,20 @@ class UtilityController extends FOSRestController
         return $this->handleView($this->view($data, 200));
     }
 
+    public function postUtilitiesAction()
+    {
+        
+    }
+
+    public function putUtilitiesAction($id)
+    {
+
+    }
+
+    public function deleteUtilitiesAction()
+    {
+
+    }
+
 
 }

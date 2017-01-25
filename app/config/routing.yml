@@ -10,5 +10,6 @@ utility:
     type: rest
     prefix: /api/{version}
     resource: AppBundle\Controller\UtilityController
+    
 
 
