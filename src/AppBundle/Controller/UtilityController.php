@@ -7,6 +7,8 @@ use AppBundle\Form\UtilityType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class UtilityController
@@ -66,6 +68,10 @@ class UtilityController extends FOSRestController
         return $this->handleView($this->view($data, 200));
     }
 
+    /**
+     * @param Request $request
+     * @return Response|BadRequestHttpException
+     */
     public function postUtilitiesAction(Request $request)
     {
         $data = json_decode($request->getContent(), true);
@@ -77,18 +83,56 @@ class UtilityController extends FOSRestController
             $em = $this->get('doctrine')->getManager();
             $em->persist($utility);
             $em->flush();
-            return $this->handleView($this->routeRedirectView('get_utility', ['id' => $utility->getId()]));
+            return $this->handleView(
+                $this->routeRedirectView('get_utility', ['id' => $utility->getId()])
+            );
         }
-        return ['form' => $form->getErrors()]; // ?? maybe not the right return here
-
+        return new BadRequestHttpException('Bad parameters for request');
     }
 
-    public function putUtilityAction($id)
+    /**
+     * @param Request $request
+     * @param $id
+     * @return Response|BadRequestHttpException
+     */
+    public function putUtilityAction(Request $request, $id)
     {
+        $data = json_decode($request->getContent(), true);
+        $em = $this->get('doctrine')->getManager();
+        $utility = $em->find('AppBundle:Utility', $id);
+        if (null === $utility) {
+            $utility = new Utility();
+            // assigning id is not possible for IDENTITY id-field strategy
+            $utility->setId($id);
+            $statusCode = Response::HTTP_CREATED;
+        } else {
+            $statusCode = Response::HTTP_NO_CONTENT;
+        }
+
+        $form = $this->createForm(UtilityType::class, $utility);
+        $form->submit($data);
+
+        if ($form->isValid()) {
+
+            $em->persist($utility);
+            $em->flush();
+            return $this->handleView(
+                $this->routeRedirectView('get_utility', ['id' => $utility->getId()], $statusCode)
+            );
+        }
+        return new BadRequestHttpException('Bad parameters for request');
     }
 
-    public function deleteUtilityAction()
+    public function deleteUtilityAction($id)
     {
+        $em = $this->get('doctrine')->getManager();
+        $utility = $em->find('AppBundle:Utility', $id);
+        $statusCode = $utility === null ? Response::HTTP_NOT_FOUND : Response::HTTP_NO_CONTENT;
+        $em->remove($utility);
+        $em->flush();
+        return $this->handleView(
+            $this->routeRedirectView('get_utilities', [], $statusCode)
+        );
     }
 
 

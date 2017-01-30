@@ -151,5 +151,14 @@ class Utility implements JsonSerializable
             'name' => $this->getName()
         ];
     }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 }
 
