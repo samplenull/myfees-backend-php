@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab31b863c86d58f54fd0988a7970ddb7",
+    "content-hash": "0d1b234d065e14b09c248e44ce68659d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2872,6 +2872,58 @@
                 "negotiation"
             ],
             "time": "2016-10-14T09:17:47+00:00"
+        },
+        {
+            "name": "willdurand/rest-extra-bundle",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/BazingaRestExtraBundle.git",
+                "reference": "39c329017b7d09084f1bbe5582d749d0651aac2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/BazingaRestExtraBundle/zipball/39c329017b7d09084f1bbe5582d749d0651aac2d",
+                "reference": "39c329017b7d09084f1bbe5582d749d0651aac2d",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": "~2.1|~3.0"
+            },
+            "require-dev": {
+                "sensio/framework-extra-bundle": "~2.1|~3.0",
+                "symfony/browser-kit": "~2.1|~3.0",
+                "symfony/finder": "~2.1|~3.0",
+                "symfony/form": "~2.1|~3.0",
+                "symfony/yaml": "~2.1|~3.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bazinga\\Bundle\\RestExtraBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "will+git@drnd.me"
+                }
+            ],
+            "description": "This bundle provides extra features for your REST APIs built using Symfony2.",
+            "keywords": [
+                "api",
+                "rest"
+            ],
+            "time": "2016-08-08T12:24:20+00:00"
         },
         {
             "name": "zendframework/zend-code",
