@@ -1,3 +1,4 @@
+# app/config/routing.yml
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/v1/doc
@@ -6,10 +7,8 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-utility:
+
+app_utilities:
     type: rest
-    prefix: /api/v1
-    resource: AppBundle\Controller\UtilityController
-
-
-
+    host:   symfony.local
+    resource: "@AppBundle/Resources/config/utility_routes.yml"
