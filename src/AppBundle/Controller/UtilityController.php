@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class UtilityController extends FOSRestController
 {
+    const RESOURCE_ENTITY_ALIAS = 'AppBundle:Utility';
 
     /**
      * Return all utilities
@@ -28,12 +29,12 @@ class UtilityController extends FOSRestController
      *   }
      * )
      *
-     *
+     * @return Response
      */
     public function getUtilitiesAction()
     {
         $em = $this->get('doctrine')->getManager();
-        $data = $em->getRepository('AppBundle:Utility')->findAll();
+        $data = $em->getRepository(self::RESOURCE_ENTITY_ALIAS)->findAll();
 
         if (!$data) {
             $this->createNotFoundException('There is no utilities found');
@@ -55,42 +56,65 @@ class UtilityController extends FOSRestController
      *
      * @internal param int $id the utility id
      * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      */
     public function getUtilityAction($id)
     {
         $em = $this->get('doctrine')->getManager();
-        $data = $em->getRepository('AppBundle:Utility')->find($id);
+        $data = $em->getRepository(self::RESOURCE_ENTITY_ALIAS)->find($id);
         if (!$data) {
             $this->createNotFoundException('Utility does not exist');
         }
         return $this->handleView($this->view($data, 200));
     }
-
     /**
+     * Creates a new utility from the submitted JSON data.
+     *
+     * @ApiDoc(
+     *    resource = true,
+     *    input = "AppBundle\Form\UtilityType",
+     *    statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Returned when the form has errors"
+     *    }
+     * )
      * @param Request $request
      * @return Response|BadRequestHttpException
+     *
      */
     public function postUtilitiesAction(Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        $utility = new Utility();
-        $form = $this->createForm(UtilityType::class, $utility);
+        $item = new Utility();
+        $form = $this->createForm(UtilityType::class, $item);
         $form->submit($data);
 
         if ($form->isValid()) {
             $em = $this->get('doctrine')->getManager();
-            $em->persist($utility);
+            $em->persist($item);
             $em->flush();
             return $this->handleView(
-                $this->routeRedirectView('get_utility', ['id' => $utility->getId()])
+                $this->routeRedirectView('get_utility', ['id' => $item->getId()])
             );
         }
         return new BadRequestHttpException('Bad parameters for request');
     }
 
     /**
+     *
+     * Update existing note from the submitted data or create a new note at a specific location.
+     *
+     * @ApiDoc(
+     *    resource = true,
+     *    input = "AppBundle\Form\UtilityType",
+     *    statusCodes = {
+     *      201 = "Returned when a new resource is created",
+     *      204 = "Returned when successful",
+     *      400 = "Returned when the form has errors"
+     *    }
+     * )
+     *
      * @param Request $request
      * @param $id
      * @return Response|BadRequestHttpException
@@ -99,36 +123,51 @@ class UtilityController extends FOSRestController
     {
         $data = json_decode($request->getContent(), true);
         $em = $this->get('doctrine')->getManager();
-        $utility = $em->find('AppBundle:Utility', $id);
-        if (null === $utility) {
-            $utility = new Utility();
+        $item = $em->find(self::RESOURCE_ENTITY_ALIAS, $id);
+        if (null === $item) {
+            $item = new Utility();
             // assigning id is not possible for IDENTITY id-field strategy
-            $utility->setId($id);
+            $item->setId($id);
             $statusCode = Response::HTTP_CREATED;
         } else {
             $statusCode = Response::HTTP_NO_CONTENT;
         }
 
-        $form = $this->createForm(UtilityType::class, $utility);
+        $form = $this->createForm(UtilityType::class, $item);
         $form->submit($data);
 
         if ($form->isValid()) {
 
-            $em->persist($utility);
+            $em->persist($item);
             $em->flush();
             return $this->handleView(
-                $this->routeRedirectView('get_utility', ['id' => $utility->getId()], $statusCode)
+                $this->routeRedirectView('get_utility', ['id' => $item->getId()], $statusCode)
             );
         }
         return new BadRequestHttpException('Bad parameters for request');
     }
 
+    /**
+     * Removes utility
+     *
+     * @ApiDoc(
+     *    resource = true,
+     *    statusCodes = {
+     *      204 = "Returned when successful",
+     *      400 = "Returned when the form has errors",
+     *      404 = "Returned when item not found"
+     *    }
+     * )
+     *
+     * @param $id
+     * @return Response
+     */
     public function deleteUtilityAction($id)
     {
         $em = $this->get('doctrine')->getManager();
-        $utility = $em->find('AppBundle:Utility', $id);
-        $statusCode = $utility === null ? Response::HTTP_NOT_FOUND : Response::HTTP_NO_CONTENT;
-        $em->remove($utility);
+        $item = $em->find(self::RESOURCE_ENTITY_ALIAS, $id);
+        $statusCode = $item === null ? Response::HTTP_NOT_FOUND : Response::HTTP_NO_CONTENT;
+        $em->remove($item);
         $em->flush();
         return $this->handleView(
             $this->routeRedirectView('get_utilities', [], $statusCode)
