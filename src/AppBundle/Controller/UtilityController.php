@@ -95,7 +95,7 @@ class UtilityController extends FOSRestController
             $em->persist($item);
             $em->flush();
             return $this->handleView(
-                $this->routeRedirectView('get_utility', ['id' => $item->getId()])
+                $this->routeRedirectView('api_get_utility', ['id' => $item->getId()])
             );
         }
         return new BadRequestHttpException('Bad parameters for request');
@@ -141,7 +141,7 @@ class UtilityController extends FOSRestController
             $em->persist($item);
             $em->flush();
             return $this->handleView(
-                $this->routeRedirectView('get_utility', ['id' => $item->getId()], $statusCode)
+                $this->routeRedirectView('api_get_utility', ['id' => $item->getId()], $statusCode)
             );
         }
         return new BadRequestHttpException('Bad parameters for request');
@@ -170,7 +170,7 @@ class UtilityController extends FOSRestController
         $em->remove($item);
         $em->flush();
         return $this->handleView(
-            $this->routeRedirectView('get_utilities', [], $statusCode)
+            $this->routeRedirectView('api_get_utilities', [], $statusCode)
         );
     }
 
