@@ -85,3 +85,7 @@ fos_rest:
         messages:
             Symfony\Component\HttpKernel\Exception\BadRequestHttpException: true
 nelmio_api_doc: ~
+
+services:
+    jms_serializer.camel_case_naming_strategy:
+        class: 'JMS\Serializer\Naming\IdenticalPropertyNamingStrategy'
