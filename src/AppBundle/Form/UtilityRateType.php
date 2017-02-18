@@ -13,7 +13,16 @@ class UtilityRateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('startDate')->add('endDate')->add('value')->add('utility')        ;
+        $builder
+            ->add('startDate', null, [
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd'
+            ])
+            ->add('endDate', null, [
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd'
+            ])
+            ->add('value');
     }
 
     /**

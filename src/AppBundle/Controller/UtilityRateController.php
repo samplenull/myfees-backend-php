@@ -37,7 +37,7 @@ class UtilityRateController extends FOSRestController
     public function getRatesAction($utility_id)
     {
         $em = $this->get('doctrine')->getManager();
-        $data = $em->getRepository(self::RESOURCE_ENTITY_ALIAS)->findOneBy(['utility' => $utility_id]);
+        $data = $em->getRepository(self::RESOURCE_ENTITY_ALIAS)->findBy(['utility' => $utility_id]);
 
         if (!$data) {
             $this->createNotFoundException('There is no rates found');
@@ -92,18 +92,19 @@ class UtilityRateController extends FOSRestController
         $data = json_decode($request->getContent(), true);
         $item = new UtilityRate();
         $em = $this->get('doctrine')->getManager();
+        /** @var Utility $utility */
         $utility = $em->find('AppBundle:Utility', $utility_id);
-        $item->setUtility($utility);
+        $utility->addRate($item);
         $form = $this->createForm(UtilityRateType::class, $item);
         $form->submit($data);
-        if ($form->isValid()) {
 
+        if ($form->isValid()) {
             $em->persist($item);
             $em->flush();
             return $this->handleView(
                 $this->routeRedirectView('api_get_utility_rate',
                     [
-                        'utility_id' => $item->getUtility()->getId(),
+                        'utility_id' => $utility->getId(),
                         'id' => $item->getId()
                     ])
             );
@@ -134,27 +135,32 @@ class UtilityRateController extends FOSRestController
     {
         $data = json_decode($request->getContent(), true);
         $em = $this->get('doctrine')->getManager();
+        /** @var Utility $utility */
+        $utility = $em->find('AppBundle:Utility', $utility_id);
+        /** @var UtilityRate $item */
         $item = $em->find(self::RESOURCE_ENTITY_ALIAS, $id);
+
         if (null === $item) {
             $item = new UtilityRate();
             // assigning id is not possible for IDENTITY id-field strategy
             // $item->setId($id);
             $statusCode = Response::HTTP_CREATED;
+            $utility->addRate($item);
         } else {
             $statusCode = Response::HTTP_NO_CONTENT;
+            $item->setUtility($utility);
         }
 
         $form = $this->createForm(UtilityRateType::class, $item);
         $form->submit($data);
 
         if ($form->isValid()) {
-
             $em->persist($item);
             $em->flush();
             return $this->handleView(
                 $this->routeRedirectView('api_get_utility_rate',
                     [
-                        'utility_id' => $item->getUtility()->getId(),
+                        'utility_id' => $utility->getId(),
                         'id' => $item->getId()
                     ], $statusCode)
             );
@@ -174,18 +180,28 @@ class UtilityRateController extends FOSRestController
      *    }
      * )
      *
+     * @param $utility_id
      * @param $id
      * @return Response
      */
-    public function deleteRateAction($id)
+    public function deleteRateAction($utility_id, $id)
     {
         $em = $this->get('doctrine')->getManager();
         $item = $em->find(self::RESOURCE_ENTITY_ALIAS, $id);
-        $statusCode = $item === null ? Response::HTTP_NOT_FOUND : Response::HTTP_NO_CONTENT;
-        $em->remove($item);
-        $em->flush();
+        /** @var Utility $utility */
+        $utility = $em->find('AppBundle:Utility', $utility_id);
+        if ($item === null) {
+            $statusCode = Response::HTTP_NOT_FOUND;
+        } else {
+            $em->remove($item);
+            $em->flush();
+            $statusCode = Response::HTTP_NO_CONTENT;
+        }
         return $this->handleView(
-            $this->routeRedirectView('api_get_utility_rates', [], $statusCode)
+            $this->routeRedirectView('api_get_utility_rates',
+                [
+                    'utility_id' => $utility->getId(),
+                ], $statusCode)
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Exclude;
 use JsonSerializable;
@@ -52,6 +53,13 @@ class Utility implements JsonSerializable
      * @Exclude
      */
     private $readings;
+
+    public function __construct()
+    {
+        $this->rates = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
+        $this->readings = new ArrayCollection();
+    }
 
 
     /**
@@ -158,6 +166,24 @@ class Utility implements JsonSerializable
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    public function addRate(UtilityRate $rate)
+    {
+        $rate->setUtility($this);
+        $this->rates->add($rate);
+    }
+
+    public function addReading(Reading $reading)
+    {
+        $reading->setUtility($this);
+        $this->readings->add($reading);
+    }
+
+    public function addInvoice(Invoice $invoice)
+    {
+        $invoice->setUtility($this);
+        $this->invoices->add($invoice);
     }
 
 }
