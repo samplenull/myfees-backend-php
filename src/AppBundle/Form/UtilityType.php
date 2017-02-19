@@ -15,7 +15,7 @@ class UtilityType extends AbstractType
     {
         $builder->add('name');
     }
-    
+
     /**
      * {@inheritdoc}
      */

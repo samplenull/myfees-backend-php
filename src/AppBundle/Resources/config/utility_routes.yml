@@ -4,9 +4,20 @@ utility:
     resource: AppBundle\Controller\UtilityController
     name_prefix:  api_
 
-
 rate:
     parent: utility
     type: rest
     resource: AppBundle\Controller\UtilityRateController
+    name_prefix:  api_
+
+reading:
+    parent: utility
+    type: rest
+    resource: AppBundle\Controller\UtilityReadingController
+    name_prefix:  api_
+
+invoice:
+    parent: utility
+    type: rest
+    resource: AppBundle\Controller\UtilityInvoiceController
     name_prefix:  api_

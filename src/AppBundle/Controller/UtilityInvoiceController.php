@@ -2,10 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Invoice;
 use AppBundle\Entity\Utility;
-use AppBundle\Entity\UtilityRate;
-use AppBundle\Form\UtilityRateType;
-use AppBundle\Form\UtilityType;
+use AppBundle\Form\InvoiceType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,31 +12,30 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class UtilityRateController
+ * Class UtilityInvoiceController
  * @package AppBundle\Controller
  */
-class UtilityRateController extends FOSRestController
+class UtilityInvoiceController extends FOSRestController
 {
-    protected const RESOURCE_ENTITY_ALIAS = 'AppBundle:UtilityRate';
-    protected const ROUTE_GET_UTILITY_RESOURCES = 'api_get_utility_rates';
-    protected const ROUTE_GET_UTILITY_RESOURCE = 'api_get_utility_rate';
-
+    protected const RESOURCE_ENTITY_ALIAS = 'AppBundle:Invoice';
+    protected const ROUTE_GET_UTILITY_RESOURCES = 'api_get_utility_invoices';
+    protected const ROUTE_GET_UTILITY_RESOURCE = 'api_get_utility_invoice';
 
     /**
-     * Return all rates for specified utility
+     * Return all invoices for specified utility
      *
      * @ApiDoc(
      *   resource = true,
      *   statusCodes={
      *     200 = "Returned when successful",
-     *     404 = "Returned when no rates is found"
+     *     404 = "Returned when no invoices is found"
      *   }
      * )
      *
      * @param $utility_id
      * @return Response
      */
-    public function getRatesAction($utility_id)
+    public function getInvoicesAction($utility_id)
     {
         $em = $this->get('doctrine')->getManager();
         $data = $em->getRepository(self::RESOURCE_ENTITY_ALIAS)->findBy(['utility' => $utility_id]);
@@ -65,7 +63,7 @@ class UtilityRateController extends FOSRestController
      * @param $id
      * @return Response
      */
-    public function getRateAction($utility_id, $id)
+    public function getInvoiceAction($utility_id, $id)
     {
         $em = $this->get('doctrine')->getManager();
         $data = $em->getRepository(self::RESOURCE_ENTITY_ALIAS)->findOneBy(['id' => $id]);
@@ -80,7 +78,7 @@ class UtilityRateController extends FOSRestController
      *
      * @ApiDoc(
      *    resource = true,
-     *    input = "AppBundle\Form\UtilityRateType",
+     *    input = "AppBundle\Form\InvoiceType",
      *    statusCodes = {
      *      200 = "Returned when successful",
      *      400 = "Returned when the form has errors"
@@ -90,14 +88,14 @@ class UtilityRateController extends FOSRestController
      * @param $utility_id
      * @return Response|BadRequestHttpException
      */
-    public function postRatesAction(Request $request, $utility_id)
+    public function postInvoicesAction(Request $request, $utility_id)
     {
         $data = json_decode($request->getContent(), true);
-        $item = new UtilityRate();
+        $item = new Invoice();
         $em = $this->get('doctrine')->getManager();
         /** @var Utility $utility */
         $utility = $em->find('AppBundle:Utility', $utility_id);
-        $utility->addRate($item);
+        $utility->addInvoice($item);
         $form = $this->createForm($this->getFormClass(), $item);
         $form->submit($data);
 
@@ -117,11 +115,11 @@ class UtilityRateController extends FOSRestController
 
     /**
      *
-     * Update existing rate from the submitted data or create a new note at a specific location.
+     * Update existing note from the submitted data or create a new invoice at a specific location.
      *
      * @ApiDoc(
      *    resource = true,
-     *    input = "AppBundle\Form\UtilityRateType",
+     *    input = "AppBundle\Form\InvoiceType",
      *    statusCodes = {
      *      201 = "Returned when a new resource is created",
      *      204 = "Returned when successful",
@@ -134,21 +132,21 @@ class UtilityRateController extends FOSRestController
      * @param $utility_id
      * @return Response|BadRequestHttpException
      */
-    public function putRateAction(Request $request, $utility_id, $id)
+    public function putInvoiceAction(Request $request, $utility_id, $id)
     {
         $data = json_decode($request->getContent(), true);
         $em = $this->get('doctrine')->getManager();
         /** @var Utility $utility */
         $utility = $em->find('AppBundle:Utility', $utility_id);
-        /** @var UtilityRate $item */
+        /** @var Invoice $item */
         $item = $em->find(self::RESOURCE_ENTITY_ALIAS, $id);
 
         if (null === $item) {
-            $item = new UtilityRate();
+            $item = new Invoice;
             // assigning id is not possible for IDENTITY id-field strategy
             // $item->setId($id);
             $statusCode = Response::HTTP_CREATED;
-            $utility->addRate($item);
+            $utility->addInvoice($item);
         } else {
             $statusCode = Response::HTTP_NO_CONTENT;
             $item->setUtility($utility);
@@ -172,7 +170,7 @@ class UtilityRateController extends FOSRestController
     }
 
     /**
-     * Removes rate
+     * Removes invoice
      *
      * @ApiDoc(
      *    resource = true,
@@ -187,7 +185,7 @@ class UtilityRateController extends FOSRestController
      * @param $id
      * @return Response
      */
-    public function deleteRateAction($utility_id, $id)
+    public function deleteInvoiceAction($utility_id, $id)
     {
         $em = $this->get('doctrine')->getManager();
         $item = $em->find(self::RESOURCE_ENTITY_ALIAS, $id);
@@ -213,6 +211,6 @@ class UtilityRateController extends FOSRestController
      */
     protected function getFormClass()
     {
-        return UtilityRateType::class;
+        return InvoiceType::class;
     }
 }

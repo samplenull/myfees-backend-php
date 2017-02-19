@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Utility;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,11 +17,11 @@ class UtilityRateType extends AbstractType
         $builder
             ->add('startDate', null, [
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd'
+                'format' => Utility::DATE_FORMAT
             ])
             ->add('endDate', null, [
                 'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd'
+                'format' => Utility::DATE_FORMAT
             ])
             ->add('value');
     }

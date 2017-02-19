@@ -16,7 +16,7 @@ use JsonSerializable;
 class Utility implements JsonSerializable
 {
 
-    const DATE_FORMAT = 'd.m.Y H:i:s';
+    const DATE_FORMAT = 'yyyy-MM-dd';
     /**
      * @var int
      *
