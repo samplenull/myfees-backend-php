@@ -19,7 +19,7 @@ class UtilityReadingController extends FOSRestController
 {
     protected const RESOURCE_ENTITY_ALIAS = 'AppBundle:Reading';
     protected const ROUTE_GET_UTILITY_RESOURCES = 'api_get_utility_readings';
-    protected const ROUTE_GET_UTILITY_RESOURCE = 'api_get_utility_readinge';
+    protected const ROUTE_GET_UTILITY_RESOURCE = 'api_get_utility_reading';
 
     /**
      * Return all readings for specified utility
