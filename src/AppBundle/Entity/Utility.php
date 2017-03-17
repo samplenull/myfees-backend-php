@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Exclude;
 use JsonSerializable;
@@ -185,6 +186,69 @@ class Utility implements JsonSerializable
         $invoice->setUtility($this);
         $this->invoices->add($invoice);
     }
+
+    /**
+     * @param null $date
+     * @return Reading[]|ArrayCollection|\Doctrine\Common\Collections\Collection
+     */
+    public function getLastUncontrolledReadings($date = null)
+    {
+        $lastControlReading = $this->getLastControlReading();
+        if ($lastControlReading) {
+
+            $criteria = Criteria::create()
+                ->where(Criteria::expr()->eq('isControl', false))
+                ->where(Criteria::expr()->gt('date', $lastControlReading->getDate()))
+                ->orderBy(['date' => Criteria::ASC]);
+            return $this->readings->matching($criteria);
+        }
+        return [];
+    }
+
+    /**
+     * @return Reading|null
+     */
+    protected function getLastControlReading()
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('isControl', true))
+            ->orderBy(['date' => Criteria::DESC])
+            ->setMaxResults(1);
+        return $this->readings->matching($criteria)->first();
+    }
+
+    /**
+     * @return Reading|null
+     */
+    public function getLastReading()
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['date' => Criteria::DESC])
+            ->setMaxResults(1);
+        return $this->readings->matching($criteria)->first();
+    }
+
+    public function getLastReadingsDiff()
+    {
+        $diff = 0;
+        $lastReading = $this->getLastReading();
+        $lastControlReading = $this->getLastControlReading();
+        if ($lastReading && !$lastReading->getIsControl()) {
+            foreach ($this->getLastUncontrolledReadings() as $lastUncontrolledReading) {
+                $diff += $lastUncontrolledReading->getValue() - $lastControlReading->getValue();
+            }
+        }
+        return $diff;
+    }
+
+    public function getCurrentRate()
+    {
+        if (!$this->rates->count()) {
+            throw new \Exception('There is no rates for this utility!');
+        }
+
+    }
+
 
 }
 

@@ -46,6 +46,19 @@ class UtilityReadingController extends FOSRestController
         return $this->handleView($this->view($data, 200));
     }
 
+    public function getReadingsDiffAction(Request $request, $utility_id)
+    {
+        $em = $this->get('doctrine')->getManager();
+        $params = json_decode($request->getContent(), true);
+        $utility = $em->find('AppBundle:Utility', $utility_id);
+        $data = $utility->getLastReadingsDiff();
+
+        if (!$data) {
+            $this->createNotFoundException('Nothing found');
+        }
+        return $this->handleView($this->view($data, 200));
+    }
+
     /**
      * Return existing resource by id.
      *

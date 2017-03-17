@@ -54,7 +54,7 @@ class Reading
      *
      * @ORM\Column(name="isControl", type="boolean")
      */
-    private $isControl;
+    private $isControl = false;
 
 
     /** @ORM\PrePersist */

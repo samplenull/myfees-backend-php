@@ -15,6 +15,7 @@ class ReadingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('value')
+            ->add('isControl')
             ->add('date', null, [
                 'widget' => 'single_text',
                 'format' => Utility::DATE_FORMAT
