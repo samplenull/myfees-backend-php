@@ -49,6 +49,13 @@ class Reading
      */
     private $createdAt;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isControl", type="boolean")
+     */
+    private $isControl;
+
 
     /** @ORM\PrePersist */
     public function onPrePersist()
@@ -145,6 +152,24 @@ class Reading
     {
         $this->createdAt = $createdAt;
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsControl(): bool
+    {
+        return $this->isControl;
+    }
+
+    /**
+     * @param bool $isControl
+     */
+    public function setIsControl(bool $isControl)
+    {
+        $this->isControl = $isControl;
+    }
+
+
 
     function jsonSerialize()
     {
