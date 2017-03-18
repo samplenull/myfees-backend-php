@@ -49,7 +49,7 @@ class Utility implements JsonSerializable
     private $invoices;
 
     /**
-     * @var Invoice[]
+     * @var Reading[]
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reading", mappedBy="utility")
      * @Exclude
      */
@@ -130,7 +130,7 @@ class Utility implements JsonSerializable
     }
 
     /**
-     * @return Invoice[]
+     * @return Reading[]
      */
     public function getReadings()
     {
@@ -208,7 +208,7 @@ class Utility implements JsonSerializable
     /**
      * @return Reading|null
      */
-    protected function getLastControlReading()
+    public function getLastControlReading()
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('isControl', true))
@@ -234,8 +234,10 @@ class Utility implements JsonSerializable
         $lastReading = $this->getLastReading();
         $lastControlReading = $this->getLastControlReading();
         if ($lastReading && !$lastReading->getIsControl()) {
+            $prevValue = $lastControlReading->getValue();
             foreach ($this->getLastUncontrolledReadings() as $lastUncontrolledReading) {
-                $diff += $lastUncontrolledReading->getValue() - $lastControlReading->getValue();
+                $diff += $lastUncontrolledReading->getValue() - $prevValue;
+                $prevValue = $lastUncontrolledReading->getValue();
             }
         }
         return $diff;
@@ -248,6 +250,8 @@ class Utility implements JsonSerializable
         }
 
     }
+
+
 
 
 }
