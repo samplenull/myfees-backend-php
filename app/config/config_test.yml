@@ -17,7 +17,7 @@ swiftmailer:
 
 doctrine:
     dbal:
-        driver: sqlite
+        driver: pdo_sqlite
         host: localhost
         dbname: db_test
         user:  db_user
