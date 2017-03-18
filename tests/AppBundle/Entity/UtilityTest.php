@@ -70,7 +70,7 @@ class UtilityTest extends TestCase
        self::assertEquals(250, $this->utility->getLastReadingsDiff());
     }
 
-    public function tesGetLastUncontrolledReadings()
+    public function testGetLastUncontrolledReadings()
     {
         $lastControlReadings = $this->utility->getLastUncontrolledReadings();
         self::assertCount(2, $lastControlReadings, 'Uncontrolled readings count is bad');
